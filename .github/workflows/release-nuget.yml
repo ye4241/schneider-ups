@@ -35,4 +35,4 @@ jobs:
         run: dotnet pack src/SchneiderUPS/SchneiderUPS.csproj --no-restore -c Release -o out -p:PackageVersion=${{ steps.version.outputs.version }}
 
       - name: Push to NuGet.org
-        run: dotnet nuget push "out/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "out/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
