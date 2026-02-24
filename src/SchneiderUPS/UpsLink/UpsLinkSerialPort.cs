@@ -105,7 +105,7 @@ public sealed class UpsLinkSerialPort : IDisposable
         var result = sb.ToString();
         var colon = result.IndexOf(':');
         if (colon > 0)
-            result = result[..colon];
+            result = result.Substring(0, colon);
         return result.Trim();
     }
 
