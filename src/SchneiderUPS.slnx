@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SchneiderUPS/SchneiderUPS.csproj" />
+  <Project Path="SchneiderUPS.Sample/SchneiderUPS.Sample.csproj" />
+</Solution>
