@@ -1,0 +1,38 @@
+name: Pack and Publish to NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  pack-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#v}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Package version: $VERSION"
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore src/SchneiderUPS/SchneiderUPS.csproj
+
+      - name: Pack
+        run: dotnet pack src/SchneiderUPS/SchneiderUPS.csproj --no-restore -c Release -o out -p:PackageVersion=${{ steps.version.outputs.version }}
+
+      - name: Push to NuGet.org
+        run: dotnet nuget push "out/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
